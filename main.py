@@ -19,7 +19,7 @@ class App:
 	def cancel(self,event=None):
 		if(len(self.POS_LIST) != 0):
 			coords = self.POS_LIST.pop()
-			if(self.DICO[(coords[0],coords[1])] == 1):
+			if(self.DICO[(coords[0],coords[1])] == 0):
 				self.canv.delete("nb_"+str(coords[0])+str(coords[1]))
 				self.canv.delete("rect_"+str(coords[0])+str(coords[1]))
 				self.DICO.pop((coords[0],coords[1]))
@@ -49,13 +49,13 @@ class App:
 			for lines in file.readlines():
 				parse = lines.rstrip().split(',')
 				coords = list(map(int,parse[0].split(" ")))
-				for i in range(int(parse[1])):
+				for i in range(int(parse[1])+1):
 					self.placeNote(coords)
 		file.close()
 
 	def savePartition(self):
 		file = filedialog.asksaveasfilename(
-			defaultextension=".ihm",
+			defaultextension=".tab",
 			filetypes=(("Tab Files", ".tab"),("All files", ".*"))
 		)
 		if not file:
@@ -152,18 +152,18 @@ class App:
 			fill='white', outline='white',tag="rect_"+str(coords[0])+str(coords[1]))
 		if(self.DICO.get((coords[0],coords[1])) is not None):
 			if(self.DICO[(coords[0],coords[1])] == 21):
-				self.canv.create_text(coords[0],coords[1], text="1",
+				self.canv.create_text(coords[0],coords[1], text="0",
 					tag="nb_"+str(coords[0])+str(coords[1]))
-				self.DICO[(coords[0],coords[1])] = 1
+				self.DICO[(coords[0],coords[1])] = 0
 			else:
 				self.canv.create_text(coords[0],coords[1],
 					text=str(self.DICO[(coords[0],coords[1])]+1),
 					tag="nb_"+str(coords[0])+str(coords[1]))
 				self.DICO[(coords[0],coords[1])] += 1
 		else:
-			self.canv.create_text(coords[0],coords[1], text="1",
+			self.canv.create_text(coords[0],coords[1], text="0",
 				tag="nb_"+str(coords[0])+str(coords[1]))
-			self.DICO[(coords[0],coords[1])] = 1
+			self.DICO[(coords[0],coords[1])] = 0
 		self.POS_LIST.append(coords)
 
 
